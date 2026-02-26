@@ -1,4 +1,4 @@
-const CACHE_NAME="spl-i-v4";
+const CACHE_NAME="spl-i-v5";
 const ASSETS=["./","./index.html","./admin.html","./manifest.json","./logo.png","./icon-192.png","./icon-512.png","./service-worker.js"];
 self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.map(k=>k===CACHE_NAME?null:caches.delete(k)))).then(()=>self.clients.claim())));

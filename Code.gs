@@ -15,8 +15,22 @@ function defaultData(){
 function getStored(){
   const props = PropertiesService.getScriptProperties();
   const raw = props.getProperty(PROP_KEY);
-  if(!raw) return defaultData();
-  try { return JSON.parse(raw); } catch(e) { return defaultData(); }
+  let data = null;
+  if(raw){
+    try { data = JSON.parse(raw); } catch(e) { data = null; }
+  }
+  const def = defaultData();
+  if(!data || typeof data !== "object") return def;
+
+  // merge defaults (importante si alguien guardó teams vacíos)
+  if(!data.rules || typeof data.rules !== "object") data.rules = def.rules;
+  if(data.rules.winPoints === undefined) data.rules.winPoints = def.rules.winPoints;
+  if(data.rules.fastLapPoints === undefined) data.rules.fastLapPoints = def.rules.fastLapPoints;
+
+  if(!Array.isArray(data.teams) || data.teams.length === 0) data.teams = def.teams;
+  if(!Array.isArray(data.rounds)) data.rounds = [];
+
+  return data;
 }
 
 function setStored(obj){
