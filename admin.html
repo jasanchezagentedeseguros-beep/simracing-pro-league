@@ -283,13 +283,13 @@ async function apiSave(data, password){
 
 let DATA = null;
 const DEFAULT_TEAMS = [{id:"adp",name:"ADP Racing"},{id:"jas",name:"J. A. S. Simracing"}];
+let teamsTouched = false;
 
 function teamsToText(teams){ return (teams||[]).map(t=>`${t.id}|${t.name}`).join("\\n"); }
 function textToTeams(text){
-  // Normaliza: si alguien pegó "\n" literal, lo convertimos a salto real
   const normalized = String(text||"")
     .replaceAll("\r\n", "\n")
-    .replaceAll("\\n", "\n");
+    .replaceAll("\\n", "\n"); // convierte \n literal en salto real
   return normalized.split("\n").map(l=>l.trim()).filter(Boolean).map(line=>{
     const [id, ...rest] = line.split("|");
     return { id:(id||"").trim(), name:rest.join("|").trim() };
@@ -335,14 +335,19 @@ function renderPreview(){
 }
 function applyRulesTeams(){
   DATA.rules = { winPoints:Number(winPoints.value||25), fastLapPoints:Number(flPoints.value||2) };
+
   const parsed = textToTeams(teamsText.value);
 
-  // No borres equipos si el textarea está vacío por accidente
-  if(parsed.length > 0){
+  // Solo sustituye equipos si el usuario los ha tocado y el parseo tiene datos válidos
+  if(teamsTouched && parsed.length > 0){
     DATA.teams = parsed;
-  }else if(!Array.isArray(DATA.teams) || DATA.teams.length === 0){
+  }
+
+  // Si por cualquier motivo nos quedamos sin equipos, restauramos defaults
+  if(!Array.isArray(DATA.teams) || DATA.teams.length === 0){
     DATA.teams = DEFAULT_TEAMS.slice();
     teamsText.value = teamsToText(DATA.teams);
+    teamsTouched = false;
   }
 
   fillSelects();
@@ -359,6 +364,7 @@ async function load(){
     winPoints.value = DATA.rules.winPoints;
     flPoints.value = DATA.rules.fastLapPoints;
     teamsText.value = teamsToText(DATA.teams);
+    teamsTouched = false;
     fillSelects();
     renderPreview();
     adminPass.value = sessionStorage.getItem("spl_admin_pass") || "74877543";
@@ -369,6 +375,7 @@ async function load(){
     toast("No puedo cargar datos. Revisa API_URL.");
   }
 }
+teamsText.addEventListener("input", ()=>{ teamsTouched = true; });
 adminPass.addEventListener("input", ()=> sessionStorage.setItem("spl_admin_pass", adminPass.value));
 
 btnUpsert.addEventListener("click", ()=>{
