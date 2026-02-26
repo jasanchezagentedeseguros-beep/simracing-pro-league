@@ -1,0 +1,315 @@
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>SIMRACING Pro League I • Clasificación</title>
+
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#070a10">
+<link rel="icon" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<style>
+
+:root{
+  --bg:#070a10;
+  --panel:rgba(255,255,255,.07);
+  --text:rgba(255,255,255,.92);
+  --muted:rgba(255,255,255,.68);
+  --line:rgba(255,255,255,.14);
+  --accent:#ff9f1a;
+  --accent2:#76ff03;
+  --shadow:0 14px 40px rgba(0,0,0,.45);
+  --r:18px;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  --sans:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:var(--sans);
+  color:var(--text);
+  background:
+    radial-gradient(900px 500px at 18% 8%, rgba(255,159,26,.16), transparent 55%),
+    radial-gradient(700px 420px at 84% 20%, rgba(118,255,3,.12), transparent 58%),
+    radial-gradient(820px 520px at 70% 85%, rgba(0,212,255,.08), transparent 55%),
+    linear-gradient(180deg, #06080f, var(--bg));
+  overflow-x:hidden;
+}
+body:before{
+  content:"";
+  position:fixed; inset:-20px;
+  background-image:
+    linear-gradient(120deg, rgba(255,255,255,.06) 0 2px, transparent 2px 22px),
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,.08), transparent 35%),
+    radial-gradient(circle at 70% 60%, rgba(255,255,255,.05), transparent 40%);
+  background-size: 26px 26px, 900px 700px, 1100px 900px;
+  transform:skewY(-4deg);
+  opacity:.18;
+  pointer-events:none;
+  z-index:-2;
+}
+body:after{
+  content:"";
+  position:fixed; inset:-40px;
+  background:
+    linear-gradient(115deg, transparent 0 38%, rgba(255,159,26,.09) 38% 39%, transparent 39% 55%, rgba(118,255,3,.07) 55% 56%, transparent 56% 100%),
+    linear-gradient(115deg, transparent 0 52%, rgba(255,255,255,.05) 52% 52.6%, transparent 52.6% 100%);
+  opacity:.55;
+  pointer-events:none;
+  z-index:-1;
+}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+header{
+  position:sticky; top:0; z-index:30;
+  backdrop-filter: blur(14px);
+  background: rgba(7,10,16,.72);
+  border-bottom:1px solid var(--line);
+}
+.topbar{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.brand{display:flex; align-items:center; gap:14px; min-width:240px}
+.brand img{width:140px;height:auto;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.brand .title{display:flex;flex-direction:column;gap:2px}
+.brand .title h1{margin:0;font-size:18px;letter-spacing:.3px}
+.brand .title .sub{font-size:12px;color:var(--muted)}
+.hero{padding:22px 0 10px}
+.heroCard{
+  border:1px solid rgba(255,255,255,.14);
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.22));
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  overflow:hidden;
+}
+.heroInner{padding:18px 16px;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.bigTitle{font-size:clamp(24px,5vw,44px);font-weight:950;letter-spacing:.6px;margin:0;line-height:1.05}
+.bigTitle span{
+  background: linear-gradient(90deg, rgba(255,159,26,1), rgba(255,255,255,.92), rgba(118,255,3,1));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.metaRow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.26);border:1px solid rgba(255,255,255,.14);color:var(--muted);font-size:12px;font-family:var(--mono)}
+.dot{width:9px;height:9px;border-radius:999px;background:var(--accent);box-shadow:0 0 0 3px rgba(255,159,26,.18)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+button,a.btn{cursor:pointer;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:var(--text);padding:12px 14px;border-radius:14px;font-weight:800;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;min-height:44px}
+button:hover,a.btn:hover{background:rgba(255,255,255,.10)}
+.btn-accent{border-color:rgba(255,159,26,.45);background:rgba(255,159,26,.12)}
+.btn-lime{border-color:rgba(118,255,3,.45);background:rgba(118,255,3,.10)}
+main{padding:12px 0 90px}
+.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}
+@media (max-width:980px){.grid{grid-template-columns:1fr}}
+.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.card .head{padding:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(0,0,0,.12))}
+.card .head h2{margin:0;font-size:14px;letter-spacing:.3px}
+.card .body{padding:14px}
+.tableWrap{overflow:auto;-webkit-overflow-scrolling:touch;border-radius:14px}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:520px}
+th,td{padding:10px;border-bottom:1px solid rgba(255,255,255,.10)}
+th{text-align:left;color:var(--muted);font-weight:800;font-size:12px}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.leaderRow{background:linear-gradient(90deg, rgba(255,159,26,.14), transparent 60%)}
+.pos{font-family:var(--mono);color:rgba(255,255,255,.75)}
+.muted{color:var(--muted)}
+.rounds{display:grid;gap:10px}
+.round{padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(0,0,0,.18)}
+.round .row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.round .title{font-family:var(--mono);font-weight:900;color:rgba(255,255,255,.86)}
+.hr{height:1px;background:rgba(255,255,255,.10);margin:12px 0}
+.form{display:grid;gap:10px}
+.field{display:grid;gap:6px}
+label{font-size:12px;color:var(--muted)}
+input,select,textarea{width:100%;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.24);color:var(--text);outline:none;font-size:14px;min-height:44px}
+textarea{min-height:92px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:640px){.row2{grid-template-columns:1fr}table{min-width:480px}header .actions a.btn{display:none}}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:84px;background:rgba(7,10,16,.86);border:1px solid rgba(255,255,255,.16);padding:10px 12px;border-radius:12px;box-shadow:var(--shadow);display:none;z-index:60;max-width:min(720px, calc(100vw - 24px))}
+.toast strong{color:var(--accent2)}
+.bottomNav{position:fixed;left:0;right:0;bottom:0;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(7,10,16,.82);border-top:1px solid rgba(255,255,255,.12);backdrop-filter:blur(14px);display:none;z-index:40}
+.bottomNav .bar{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:640px){.bottomNav{display:block}}
+
+</style></head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <img src="./logo.png" alt="SIMRACING Pro League I"/>
+        <div class="title">
+          <h1>SIMRACING Pro League I</h1>
+          <div class="sub">GT7 • Clasificación general</div>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="btn btn-lime" href="admin.html">Admin</a>
+        <button id="btnRefresh">Actualizar</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <section class="hero">
+      <div class="heroCard">
+        <div class="heroInner">
+          <div>
+            <p class="pill"><span class="dot"></span> Temporada activa</p>
+            <h2 class="bigTitle"><span>SIMRACING</span> Pro League I</h2>
+            <div class="metaRow" style="margin-top:10px">
+              <span class="pill" id="rulesPill">—</span>
+              <span class="pill" id="roundCount">0 ronda(s)</span>
+              <span class="pill">Online • Todos ven lo mismo</span>
+            </div>
+          </div>
+          <div class="metaRow">
+            <span class="pill">Líder: <strong id="leaderName">—</strong></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <section class="card">
+        <div class="head">
+          <h2>Clasificación</h2>
+          <span class="pill">Puntos</span>
+        </div>
+        <div class="body">
+          <div class="tableWrap">
+            <table id="standings">
+              <thead>
+                <tr><th>#</th><th>Equipo</th><th class="num">Puntos</th><th class="num">Victorias</th><th class="num">VR</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="hr"></div>
+          <div class="muted" style="font-size:12px">Tip: si estás en móvil y no ves cambios, pulsa <strong>Actualizar</strong>.</div>
+        </div>
+      </section>
+
+      <aside class="card">
+        <div class="head">
+          <h2>Rondas</h2>
+          <span class="pill">Resultados</span>
+        </div>
+        <div class="body">
+          <div class="rounds" id="roundsList"></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<div class="bottomNav">
+  <div class="bar">
+    <a class="btn" href="index.html">Clasificación</a>
+    <a class="btn btn-lime" href="admin.html">Admin</a>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbw8GOvHZe3ax5iWs7AmcU676rGWuVvUTl6rMOjHm4ETacb6g6D37hXLE7TaQg9k0QdR/exec";
+
+function toast(msg){
+  const el = document.getElementById("toast");
+  if(!el) return;
+  el.innerHTML = msg;
+  el.style.display = "block";
+  clearTimeout(window.__t);
+  window.__t = setTimeout(()=> el.style.display="none", 2500);
+}
+
+function teamName(data, id){ return data.teams.find(t => t.id === id)?.name || "—"; }
+
+function computeStandings(data){
+  const map = new Map();
+  (data.teams||[]).forEach(t=> map.set(t.id, {id:t.id, name:t.name, points:0, wins:0, fl:0}));
+  for(const r of (data.rounds||[])){
+    if(r.winner && map.has(r.winner)){ const t=map.get(r.winner); t.points += Number(data.rules?.winPoints||0); t.wins++; }
+    if(r.fastestLap && map.has(r.fastestLap)){ const t=map.get(r.fastestLap); t.points += Number(data.rules?.fastLapPoints||0); t.fl++; }
+  }
+  const arr=[...map.values()];
+  arr.sort((a,b)=> b.points-a.points || b.wins-a.wins || b.fl-a.fl || a.name.localeCompare(b.name));
+  return arr;
+}
+
+async function apiGet(){
+  if(!API_URL || API_URL.includes("__API_URL__")) throw new Error("API_URL missing");
+  const r = await fetch(API_URL + "?t=" + Date.now(), {cache:"no-store"});
+  if(!r.ok) throw new Error("GET failed");
+  return await r.json();
+}
+
+// POST as text/plain to avoid CORS preflight
+async function apiSave(data, password){
+  if(!API_URL || API_URL.includes("__API_URL__")) throw new Error("API_URL missing");
+  const body = JSON.stringify({ password, data });
+  const r = await fetch(API_URL, { method:"POST", body }); // no headers
+  const j = await r.json();
+  if(!j || j.ok !== true) throw new Error("unauthorized");
+  return j;
+}
+
+(function(){
+  if("serviceWorker" in navigator){
+    window.addEventListener("load", ()=> navigator.serviceWorker.register("./service-worker.js").catch(()=>{}));
+  }
+})();
+
+
+function esc(s){return String(s??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
+
+async function render(){
+  try{
+    toast("Cargando…");
+    const data = await apiGet();
+    data.rules = data.rules || {winPoints:25, fastLapPoints:2};
+    data.teams = Array.isArray(data.teams) ? data.teams : [];
+    data.rounds = Array.isArray(data.rounds) ? data.rounds : [];
+
+    rulesPill.textContent = `Victoria ${data.rules.winPoints} • VR +${data.rules.fastLapPoints}`;
+    roundCount.textContent = `${data.rounds.length} ronda(s)`;
+
+    const standings = computeStandings(data);
+    leaderName.textContent = standings[0]?.name || "—";
+
+    const tbody = document.querySelector("#standings tbody");
+    tbody.innerHTML = "";
+    standings.forEach((t, idx)=>{
+      const tr = document.createElement("tr");
+      if(idx===0) tr.classList.add("leaderRow");
+      tr.innerHTML = `<td class="pos">${idx+1}</td><td>${esc(t.name)}</td><td class="num"><strong>${t.points}</strong></td><td class="num">${t.wins}</td><td class="num">${t.fl}</td>`;
+      tbody.appendChild(tr);
+    });
+
+    const rounds = [...data.rounds].sort((a,b)=>(a.round||0)-(b.round||0));
+    roundsList.innerHTML = "";
+    for(const r of rounds){
+      const div = document.createElement("div");
+      div.className="round";
+      div.innerHTML = `
+        <div class="row"><div class="title">Ronda ${r.round ?? "—"}</div><div class="muted">${esc(r.date||"")}</div></div>
+        <div class="row" style="margin-top:8px">
+          <div><span class="muted">Ganador:</span> <strong>${esc(teamName(data, r.winner))}</strong></div>
+          <div><span class="muted">VR:</span> <strong>${esc(teamName(data, r.fastestLap))}</strong></div>
+        </div>
+        ${r.notes ? `<div class="muted" style="margin-top:8px">${esc(r.notes)}</div>` : ""}`;
+      roundsList.appendChild(div);
+    }
+
+    toast("Actualizado ✅");
+  }catch(e){
+    console.error(e);
+    toast("No puedo cargar datos. Revisa API_URL.");
+  }
+}
+
+btnRefresh.addEventListener("click", render);
+render();
+setInterval(render, 60000);
+</script>
+</body></html>
