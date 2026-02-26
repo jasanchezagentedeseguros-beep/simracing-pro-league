@@ -286,10 +286,15 @@ const DEFAULT_TEAMS = [{id:"adp",name:"ADP Racing"},{id:"jas",name:"J. A. S. Sim
 
 function teamsToText(teams){ return (teams||[]).map(t=>`${t.id}|${t.name}`).join("\\n"); }
 function textToTeams(text){
-  return (text||"").split("\\n").map(l=>l.trim()).filter(Boolean).map(line=>{
+  // Normaliza: si alguien pegó "\n" literal, lo convertimos a salto real
+  const normalized = String(text||"")
+    .replaceAll("\r\n", "\n")
+    .replaceAll("\\n", "\n");
+  return normalized.split("\n").map(l=>l.trim()).filter(Boolean).map(line=>{
     const [id, ...rest] = line.split("|");
     return { id:(id||"").trim(), name:rest.join("|").trim() };
   }).filter(t=>t.id && t.name);
+}
 }
 function fillSelects(){
   const opts = ['<option value="">—</option>'].concat((DATA.teams||[]).map(t=>`<option value="${t.id}">${t.name}</option>`));
