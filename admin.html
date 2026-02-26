@@ -354,13 +354,19 @@ async function load(){
 }
 adminPass.addEventListener("input", ()=> sessionStorage.setItem("spl_admin_pass", adminPass.value));
 
-btnUpsert.addEventListener("click", ()=>{
+
+function upsertFromForm(){
   applyRulesTeams();
   const round = Number(fRound.value);
-  if(!round || round < 1){ toast("Ronda inválida"); return; }
+  if(!round || round < 1) return false;
   const payload = { round, date:fDate.value||"", winner:fWinner.value||"", fastestLap:fFastest.value||"", notes:fNotes.value||"" };
   const ex = (DATA.rounds||[]).find(r=>Number(r.round)===round);
   if(ex) Object.assign(ex, payload); else (DATA.rounds = DATA.rounds || []).push(payload);
+  return true;
+}
+
+btnUpsert.addEventListener("click", ()=>{
+  if(!upsertFromForm()){ toast("Ronda inválida"); return; }
   renderPreview();
   toast("Cambio hecho (falta guardar).");
 });
@@ -377,14 +383,21 @@ btnSave.addEventListener("click", async ()=>{
   try{
     const pass = (adminPass.value||"").trim();
     if(!pass){ toast("Escribe la <strong>contraseña</strong>."); return; }
-    applyRulesTeams();
-    await apiSave(DATA, pass);
+
+    // Auto: si tienes una ronda rellenada, la aplicamos antes de guardar
+    const applied = upsertFromForm();
+    if(applied) renderPreview();
+
+    const res = await apiSave(DATA, pass);
     toast("Guardado para todos ✅");
+    console.log("SAVE OK:", res);
   }catch(e){
     console.error(e);
-    toast("No guardó (password o bloqueo).");
+    toast("No guardó ❌ (mira Consola/Network)");
+    alert("No se ha podido guardar. Abre la consola del navegador (F12) y mira el error.\n\nCausas típicas:\n- Password incorrecta en Code.gs\n- Deployment no está en 'Anyone'\n- No has redeployado tras cambiar Code.gs\n- No estás usando la URL /exec correcta");
   }
 });
+
 btnReload.addEventListener("click", load);
 load();
 </script>
